@@ -52,6 +52,7 @@
     <p>Elige un lote de tu Google Fotos, desliza <b style="color:var(--del)">← izquierda</b> para marcar y <b style="color:var(--keep)">derecha →</b> para conservar. Al final te muestro las marcadas para borrarlas.</p>
     <input id="cid" placeholder="Client ID de Google (solo la primera vez)" autocomplete="off">
     <button class="btn" id="go">Elegir fotos de Google Fotos</button>
+    <button class="btn" id="openPicker" style="display:none">Abrir Google Fotos y elegir</button>
     <button class="btn ghost" id="resume" style="display:none">Ver lista de marcadas</button>
     <p id="msg"></p>
   </div>
@@ -118,8 +119,9 @@ $('go').onclick = async () => {
     say('Conectando…');
     token = await getToken(cid);
     const s = await api('/sessions', { method: 'POST', body: '{}' });
-    window.open(s.pickerUri + '/autoclose', '_blank');
-    say('Elige las fotos en Google Fotos y toca “Listo”. Vuelve aquí.');
+    const ob = $('openPicker'); ob.style.display = 'block'; $('go').style.display = 'none';
+    ob.onclick = () => window.open(s.pickerUri + '/autoclose', '_blank');
+    say('Toca “Abrir Google Fotos”, elige las fotos y toca “Listo”. Luego vuelve aquí.');
     await poll(s.id);
     items = await loadItems(s.id);
     api('/sessions/' + s.id, { method: 'DELETE' }).catch(() => {});

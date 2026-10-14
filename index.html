@@ -118,7 +118,7 @@ $('go').onclick = async () => {
   try {
     say('Conectando…');
     token = await getToken(cid);
-    const s = await api('/sessions', { method: 'POST', body: '{}' });
+    const s = await api('/sessions', { method: 'POST', body: JSON.stringify({ pickingConfig: { maxItemCount: '2000' } }) });
     const ob = $('openPicker'); ob.style.display = 'block'; $('go').style.display = 'none';
     ob.onclick = () => window.open(s.pickerUri + '/autoclose', '_blank');
     say('Toca “Abrir Google Fotos”, elige las fotos y toca “Listo”. Luego vuelve aquí.');
